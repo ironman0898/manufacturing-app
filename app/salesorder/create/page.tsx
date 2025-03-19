@@ -2,18 +2,24 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
-const page = () => {
+interface Product{
+  name:string
+  id:number
+}
+
+const Page = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [orderReceiveVia, setOrderReceiveVia] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<number | null>(null);
   const [items, setItems] = useState([
-    { id: 1, product: "", size: "", qty: "", rate: "", amount: 0 },
+    { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0},
   ]);
+  const [products, setProducts] = useState<Product[]>([])
 
   const addRow = () => {
     setItems([
       ...items,
-      { id: Date.now(), product: "", size: "", qty: "", rate: "", amount: 0 },
+      { id: Date.now(), product: 0, size: "", qty: "", rate: "", amount: 0 },
     ]);
   };
 
@@ -21,7 +27,7 @@ const page = () => {
     setItems(items.filter((item) => item.id !== id));
   };
 
-  const handleInputChange = (id: number, field: string, value: any) => {
+  const handleInputChange = (id: number, field: string, value: number|string) => {
     setItems((prevItems) => 
       prevItems.map((item) => {
         if (item.id !== id) return item;
@@ -34,7 +40,6 @@ const page = () => {
       })
     );
   };
-  
 
   const handleSubmit = async () => {
     if (!orderNumber || !orderReceiveVia || !selectedCustomer) {
@@ -47,7 +52,7 @@ const page = () => {
       order_receive_via: orderReceiveVia,
       customer_id: selectedCustomer,
       items: items.map((item) => ({
-        product_name: item.product,
+        product_id: item.product,
         size: item.size,
         quantity: Number(item.qty),
         rate: Number(item.rate),
@@ -77,7 +82,7 @@ const page = () => {
       setOrderReceiveVia("");
       setSelectedCustomer(null);
       setItems([
-        { id: 1, product: "", size: "", qty: "", rate: "", amount: 0},
+        { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0},
       ]);
     } catch (error) {
       console.error("Error creating sales order:", error);
@@ -85,17 +90,18 @@ const page = () => {
     }
   };
 
-  // useEffect(()=>{
-  //   const fethcData = async()=>{
-  //     try {
-  //       const apiCall =await fetch('/api/sales-orders')
-  //     console.log(apiCall)
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  //   fethcData()
-  // }, [])
+  useEffect(()=>{
+    const fethcData = async()=>{
+      try {
+        const apiCall =await fetch('/api/product')
+        const data = await apiCall.json();
+        setProducts(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fethcData()
+  }, [])
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -156,14 +162,15 @@ const page = () => {
                 key={item.id}
                 className="grid grid-cols-5 gap-2 p-2 items-center border-b"
               >
-                <input
-                  type="text"
+                <select
+                  className="border p-2 rounded w-full"
                   value={item.product}
                   onChange={(e) =>
                     handleInputChange(item.id, "product", e.target.value)
                   }
-                  className="border p-2 rounded w-full"
-                />
+                >
+                  {products.map((val:Product)=><option key={val.id} value={val.id}>{val.name}</option>)}
+                </select>
 
                 <select
                   className="border p-2 rounded w-full"
@@ -236,4 +243,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

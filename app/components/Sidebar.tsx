@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
-const SidebarLayout = ({ children }: any) => {
+interface SidebarProps {
+  children: ReactNode;
+}
+
+const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -9,19 +14,19 @@ const SidebarLayout = ({ children }: any) => {
         <nav>
           <ul className="mt-4 space-y-2">
             <li>
-              <a href="/" className="block p-2 hover:bg-gray-700">
+              <Link href="/" className="block p-2 hover:bg-gray-700">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/tracking" className="block p-2 hover:bg-gray-700">
+              <Link href="/tracking" className="block p-2 hover:bg-gray-700">
                 Tracking
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/reports" className="block p-2 hover:bg-gray-700">
+              <Link href="/reports" className="block p-2 hover:bg-gray-700">
                 Reports
-              </a>
+              </Link>
             </li>
             <ul className="mt-4 space-y-2">
               <li>

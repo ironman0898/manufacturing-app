@@ -1,10 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+interface customers{
+  name:string
+}
+
 interface SalesOrder {
   id: number;
   order_number: string;
-  customers: any;
+  customers: customers;
   amount: number;
   current_stage: string;
   created_at: string;
@@ -22,7 +26,7 @@ const getStageColor = (stage: string) => {
   }
 };
 
-const page = () => {
+const Page = () => {
   const [orders, setOrders] = useState<SalesOrder[]>([]);
 
   useEffect(() => {
@@ -74,4 +78,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
