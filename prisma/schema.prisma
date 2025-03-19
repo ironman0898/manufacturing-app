@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model EcoBondMaster {
+  id           Int    @id @default(autoincrement())
+  material     String
+  unit         String
+  size_72_36_4 Float
+}
+
+model customers {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  email        String         @unique @db.VarChar(255)
+  sales_orders sales_orders[]
+}
+
+model mattresstype {
+  id          Int       @id @default(autoincrement())
+  create_time DateTime? @db.Date
+  name        String?   @db.VarChar(255)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model sales_order_items {
+  id             Int          @id @default(autoincrement())
+  sales_order_id Int
+  product_name   String       @db.VarChar(255)
+  size           String?      @db.VarChar(50)
+  quantity       Int
+  rate           Decimal      @db.Decimal(10, 2)
+  amount         Decimal      @db.Decimal(10, 2)
+  sales_orders   sales_orders @relation(fields: [sales_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model sales_order_stages {
+  id                Int          @id @default(autoincrement())
+  sales_order_id    Int
+  production_status String?      @default("Pending") @db.VarChar(20)
+  quilting_status   String?      @default("Pending") @db.VarChar(20)
+  pasting_status    String?      @default("Pending") @db.VarChar(20)
+  qc_status         String?      @default("Pending") @db.VarChar(20)
+  packing_status    String?      @default("Pending") @db.VarChar(20)
+  dispatch_status   String?      @default("Pending") @db.VarChar(20)
+  current_stage     String?      @default("production_status") @db.VarChar(20)
+  sales_orders      sales_orders @relation(fields: [sales_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model sales_orders {
+  id                 Int                  @id @default(autoincrement())
+  order_number       String               @unique @db.VarChar(50)
+  order_receive_via  String               @db.VarChar(255)
+  customer_id        Int
+  created_at         DateTime?            @default(now()) @db.Timestamp(6)
+  amount             Int?
+  current_stage      String               @default("Production Pending")
+  sales_order_items  sales_order_items[]
+  sales_order_stages sales_order_stages[]
+  customers          customers            @relation(fields: [customer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
