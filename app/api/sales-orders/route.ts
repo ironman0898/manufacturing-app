@@ -8,6 +8,7 @@ interface Items{
   quantity: number,
   rate: number,
   amount: number,
+  product_name:string
 }
 
 interface SalesOrderItem {
@@ -21,7 +22,7 @@ interface SalesOrderItem {
 
 export async function GET(){
   try {
-    const salesOrders = await prisma.sales_orders.findMany({
+    const salesOrder = await prisma.sales_orders.findMany({
       include: {
         customers: { select: { name: true } },
         sales_order_items: {
@@ -31,7 +32,7 @@ export async function GET(){
         },
       },
     });
-    return NextResponse.json(salesOrders, { status: 200 });
+    return NextResponse.json(salesOrder, { status: 200 });
   } catch (error) {
     console.error("Error creating sales order:", error);
     return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
@@ -59,7 +60,8 @@ export async function POST(req: NextRequest) {
     const salesOrderItems = await prisma.sales_order_items.createMany({
       data: items.map((item: Items) => ({
         sales_order_id: salesOrder.id, // Link items to sales order
-        product_id: item.product_id,
+        material_id: item.product_id,
+        product_name: item.product_name,
         size: item.size,
         quantity: item.quantity,
         rate: item.rate,
