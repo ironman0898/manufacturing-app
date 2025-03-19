@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
-interface Product{
-  name:string
-  id:number
+interface Product {
+  name: string;
+  id: number;
 }
 
 const Page = () => {
@@ -12,9 +12,9 @@ const Page = () => {
   const [orderReceiveVia, setOrderReceiveVia] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<number | null>(null);
   const [items, setItems] = useState([
-    { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0},
+    { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0 },
   ]);
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>([]);
 
   const addRow = () => {
     setItems([
@@ -27,15 +27,20 @@ const Page = () => {
     setItems(items.filter((item) => item.id !== id));
   };
 
-  const handleInputChange = (id: number, field: string, value: number|string) => {
-    setItems((prevItems) => 
+  const handleInputChange = (
+    id: number,
+    field: string,
+    value: number | string
+  ) => {
+    setItems((prevItems) =>
       prevItems.map((item) => {
         if (item.id !== id) return item;
-  
+
         // Get latest values
         const updatedItem = { ...item, [field]: value };
-        updatedItem.amount = Number(updatedItem.qty || 0) * Number(updatedItem.rate || 0);
-  
+        updatedItem.amount =
+          Number(updatedItem.qty || 0) * Number(updatedItem.rate || 0);
+
         return updatedItem;
       })
     );
@@ -51,13 +56,19 @@ const Page = () => {
       order_number: orderNumber,
       order_receive_via: orderReceiveVia,
       customer_id: selectedCustomer,
-      items: items.map((item) => ({
-        product_id: item.product,
-        size: item.size,
-        quantity: Number(item.qty),
-        rate: Number(item.rate),
-        amount: Number(item.amount),
-      })),
+      items: items.map((item) => {
+        const selectedProduct = products.find(
+          (p) => p.id === Number(item.product)
+        );
+        return {
+          product_id: Number(item.product),
+          product_name: selectedProduct ? selectedProduct.name : "",
+          size: item.size,
+          quantity: Number(item.qty),
+          rate: Number(item.rate),
+          amount: Number(item.amount),
+        };
+      }),
     };
 
     console.log("Submitting Order:", data); // Debugging log
@@ -81,27 +92,25 @@ const Page = () => {
       setOrderNumber("");
       setOrderReceiveVia("");
       setSelectedCustomer(null);
-      setItems([
-        { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0},
-      ]);
+      setItems([{ id: 1, product: 0, size: "", qty: "", rate: "", amount: 0 }]);
     } catch (error) {
       console.error("Error creating sales order:", error);
       alert("Failed to create Sales Order");
     }
   };
 
-  useEffect(()=>{
-    const fethcData = async()=>{
+  useEffect(() => {
+    const fethcData = async () => {
       try {
-        const apiCall =await fetch('/api/product')
+        const apiCall = await fetch("/api/product");
         const data = await apiCall.json();
-        setProducts(data)
+        setProducts(data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    fethcData()
-  }, [])
+    };
+    fethcData();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -169,7 +178,11 @@ const Page = () => {
                     handleInputChange(item.id, "product", e.target.value)
                   }
                 >
-                  {products.map((val:Product)=><option key={val.id} value={val.id}>{val.name}</option>)}
+                  {products.map((val: Product) => (
+                    <option key={val.id} value={val.id}>
+                      {val.name}
+                    </option>
+                  ))}
                 </select>
 
                 <select
