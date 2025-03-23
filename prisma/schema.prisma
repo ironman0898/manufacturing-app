@@ -21,6 +21,8 @@ model customers {
   id           Int            @id @default(autoincrement())
   name         String         @db.VarChar(255)
   email        String         @unique @db.VarChar(255)
+  phone_number String?        @db.VarChar
+  gstin_no     BigInt?
   sales_orders sales_orders[]
 }
 

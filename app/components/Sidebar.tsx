@@ -24,8 +24,13 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
               </Link>
             </li>
             <li>
-              <Link href="/reports" className="block p-2 hover:bg-gray-700">
-                Reports
+              <Link href="/customer/addCustomer" className="block p-2 hover:bg-gray-700">
+                Add Customer
+              </Link>
+            </li>
+            <li>
+              <Link href="/customer" className="block p-2 hover:bg-gray-700">
+                All Customer
               </Link>
             </li>
             <ul className="mt-4 space-y-2">
