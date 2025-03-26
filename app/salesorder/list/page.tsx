@@ -1,6 +1,6 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-
 interface customers{
   name:string
 }
@@ -12,6 +12,7 @@ interface SalesOrder {
   amount: number;
   current_stage: string;
   created_at: string;
+  stage_status:string
 }
 
 const getStageColor = (stage: string) => {
@@ -55,6 +56,8 @@ const Page = () => {
               <th className="p-3 border">Customer Name</th>
               <th className="p-3 border">Amount</th>
               <th className="p-3 border">Current Stage</th>
+              <th className="p-3 border">Current Stage Status</th>
+              <th className="p-3 border">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +72,8 @@ const Page = () => {
                 <td className={`p-3 border ${getStageColor(order.current_stage)}`}>
                   {order.current_stage}
                 </td>
+                <td className="p-3 border">{order.stage_status}</td>
+                <td className="p-3 border"><Link href={`/salesorder/${order.id}`}>View</Link></td>
               </tr>
             ))}
           </tbody>
