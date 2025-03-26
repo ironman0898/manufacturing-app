@@ -31,6 +31,9 @@ export async function GET(){
           },
         },
       },
+      orderBy:{
+        created_at:'desc'
+      }
     });
     return NextResponse.json(salesOrder, { status: 200 });
   } catch (error) {
@@ -52,7 +55,8 @@ export async function POST(req: NextRequest) {
         customer_id,
         created_at: new Date(),
         amount: items.reduce((acc: number, item: SalesOrderItem) => acc + item.amount, 0), // Total amount calculation
-        current_stage: "Production Pending",
+        current_stage: "Production",
+        stage_status:'Pending',
       },
     });
 
@@ -74,4 +78,13 @@ export async function POST(req: NextRequest) {
     console.error("Error creating sales order:", error);
     return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
   }
+}
+
+export async function PATCH(request: Request) {
+  const { id, newStage, newStatus } = await request.json();
+  const updatedOrder = await prisma.sales_orders.update({
+    where: { id },
+    data: { current_stage: newStage, stage_status: newStatus },
+  });
+  return NextResponse.json(updatedOrder);
 }

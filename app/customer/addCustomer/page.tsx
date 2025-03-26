@@ -7,7 +7,7 @@ interface FormData {
   lastName: string;
   email: string;
   phone: number;
-  gstin_no: number;
+  gstin_no: string;
 }
 
 interface InputError {
@@ -24,7 +24,7 @@ const Page = () => {
     lastName: "",
     email: "",
     phone: 0,
-    gstin_no: 0,
+    gstin_no: '',
   });
 
   const [error, setError] = useState<InputError>({
@@ -73,7 +73,7 @@ const Page = () => {
         lastName: "",
         email: "",
         phone: 0,
-        gstin_no: 0,
+        gstin_no: '',
       });
       setError({
         firstName: "",
@@ -186,7 +186,7 @@ const Page = () => {
               <label>GSTIN Number</label>
               <input
                 className="border p-2 rounded w-full"
-                type="number"
+                type="text"
                 value={formData.gstin_no}
                 name="gstin_no"
                 onChange={(e) => handleChange(e)}
@@ -195,7 +195,7 @@ const Page = () => {
                         ...prevError,
                         gstin_no:
                           formData.gstin_no.toString().length !== 15
-                            ? "Please Enter a valid phone number."
+                            ? "Please Enter a valid 15 gst no."
                             : "",
                       }));
                 }}

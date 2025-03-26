@@ -7,6 +7,11 @@ interface Product {
   id: number;
 }
 
+interface Customer{
+  name:string
+  id:number
+}
+
 const Page = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [orderReceiveVia, setOrderReceiveVia] = useState("");
@@ -15,6 +20,7 @@ const Page = () => {
     { id: 1, product: 0, size: "", qty: "", rate: "", amount: 0 },
   ]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [listOfCustomers, setListOfCustomers] = useState<Customer[]>([])
 
   const addRow = () => {
     setItems([
@@ -109,7 +115,17 @@ const Page = () => {
         console.log(error);
       }
     };
+    const fethcCustomer = async () => {
+      try {
+        const apiCall = await fetch("/api/customer");
+        const data = await apiCall.json();
+        setListOfCustomers(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fethcData();
+    fethcCustomer()
   }, []);
 
   return (
@@ -152,8 +168,9 @@ const Page = () => {
                 onChange={(e) => setSelectedCustomer(Number(e.target.value))}
               >
                 <option value="">Choose Customer</option>
-                <option value="1">Customer A</option>
-                <option value="2">Customer B</option>
+                {
+                  listOfCustomers.map((item:Customer)=> <option key={item.id} value={item.id}>{item.name}</option>)
+                }
               </select>
             </div>
           </div>
