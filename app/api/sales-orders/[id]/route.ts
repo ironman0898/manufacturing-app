@@ -6,6 +6,7 @@ export async function GET(request: Request) {
     // Extract query parameters from the request URL
     const { searchParams } = new URL(request.url);
     const orderId = searchParams.get('id');
+    
 
     if (!orderId || isNaN(Number(orderId))) {
       return NextResponse.json({ error: 'Invalid or missing order ID' }, { status: 400 });
