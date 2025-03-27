@@ -29,7 +29,7 @@ export default function Page() {
 
   useEffect(() => {
     if (id) {
-      fetch(`/api/sales-orders/id?id=${id}`)
+      fetch(`/api/sales-orders/orderdetails?id=${id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) alert(data.error);
