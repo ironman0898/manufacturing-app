@@ -94,6 +94,22 @@ const SidebarLayout: React.FC<SidebarProps> = ({ children }) => {
                 </Link>
               )}
             </li>
+            <li className="flex items-center gap-2">
+              <span>📊</span>
+              {isSidebarOpen && (
+                <Link href="/inventory/view" className="hover:text-gray-300 transition-colors">
+                  View Inventory
+                </Link>
+              )}
+            </li>
+            <li className="flex items-center gap-2">
+              <span>📊</span>
+              {isSidebarOpen && (
+                <Link href="/inventory/add" className="hover:text-gray-300 transition-colors">
+                  Add Inventory
+                </Link>
+              )}
+            </li>
           </ul>
         </nav>
       </aside>

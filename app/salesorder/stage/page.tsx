@@ -39,7 +39,7 @@ export default function SalesOrders() {
     let newStage = currentStage;
     let newStatus = currentStatus === 'Pending' ? 'Processing' : 'Completed';
 
-    if (newStatus === 'Completed') {
+    if (currentStage !== 'Dispatch' && newStatus === 'Completed') {
       newStage = getNextStage(currentStage);
       newStatus = 'Pending';
     }

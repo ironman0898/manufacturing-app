@@ -27,7 +27,7 @@ const Page = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold">Sales Order List</h1>
+      <h1 className="text-2xl font-bold">All Customers</h1>
       <div className="bg-white p-6 mt-4 shadow rounded-lg">
         <table className="w-full border-collapse border">
           <thead>
