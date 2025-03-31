@@ -9,12 +9,13 @@ datasource db {
 }
 
 model EcoBondMaster {
-  id           Int           @id @default(autoincrement())
-  material     String        @db.VarChar
-  unit         String        @db.VarChar
-  size_72_36_4 Float
-  material_id  Int?
-  mattresstype mattresstype? @relation(fields: [material_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                Int           @id @default(autoincrement())
+  material          String        @db.VarChar
+  unit              String        @db.VarChar
+  size_72_36_4      Float
+  material_id       Int?
+  avilable_quantity Float?        @default(0)
+  mattresstype      mattresstype? @relation(fields: [material_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model customers {
@@ -31,8 +32,12 @@ model mattresstype {
   id                Int                 @id @default(autoincrement())
   create_time       DateTime?           @db.Date
   name              String?             @db.VarChar(255)
+  table_name        String?
   EcoBondMaster     EcoBondMaster[]
+  delite            delite[]
   sales_order_items sales_order_items[]
+  velocity          velocity[]
+  velocity_plus     velocity_plus[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -74,4 +79,41 @@ model sales_orders {
   sales_order_items  sales_order_items[]
   sales_order_stages sales_order_stages[]
   customers          customers            @relation(fields: [customer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model velocity {
+  id                Int          @id @default(autoincrement())
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  material          String?      @db.VarChar
+  unit              String?      @db.VarChar
+  size_72_30_4      Float?
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  /// This field was commented out because of an invalid name. Please provide a valid one that matches [a-zA-Z][a-zA-Z0-9_]*
+  material_id       Int          @default(1)
+  avilable_quantity Float        @default(0)
+  mattresstype      mattresstype @relation(fields: [material_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model velocity_plus {
+  id                Int          @id @default(autoincrement())
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  material          String?      @db.VarChar
+  unit              String?      @db.VarChar
+  avilable_quantity Float?       @default(0)
+  size_72_30_5      Float?       @default(0)
+  material_id       Int          @default(4)
+  mattresstype      mattresstype @relation(fields: [material_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model delite {
+  id                Int          @id @default(autoincrement())
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  material          String?      @db.VarChar
+  unit              String?      @db.VarChar
+  avilable_quantity Float?       @default(0)
+  size_72_30_4      Float?       @default(0)
+  material_id       Int          @default(2)
+  mattresstype      mattresstype @relation(fields: [material_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
